@@ -25,11 +25,11 @@ public class Member {
     @NotBlank(message = "MembershipType is required")
     private String membershipType;
 
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     @Column(updatable = false)
     private Date createdOn;
 
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Date updatedOn;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
