@@ -3,6 +3,7 @@ package com.imrancluster.savedream.services;
 import com.imrancluster.savedream.exceptions.DreamerNotFoundException;
 import com.imrancluster.savedream.exceptions.DreamerPrimaryMobileException;
 import com.imrancluster.savedream.exceptions.MemberNotFoundRexception;
+import com.imrancluster.savedream.exceptions.ProfileNotFoundException;
 import com.imrancluster.savedream.model.Member;
 import com.imrancluster.savedream.model.Profile;
 import com.imrancluster.savedream.repositories.MemberRepository;
@@ -69,40 +70,27 @@ public class MemberService {
 
         try {
 
-            if (member != null) {
+            Profile profile1 = member.getProfile();
 
-                Profile profile1 = member.getProfile();
+            if (profile1 == null) {
+                profile.setMember(member);
+                Profile theProfile = profileRepository.save(profile);
 
-                if (profile1 == null) {
-                    profile.setMember(member);
-                    Profile theProfile = profileRepository.save(profile);
+                member.setProfile(theProfile);
+                memberRepository.save(member);
 
-                    member.setProfile(theProfile);
-                    memberRepository.save(member);
-
+            } else {
+                if (profile.getId() != null) {
+                    profileRepository.save(profile);
                 } else {
-                    if (profile.getId() != null) {
-                        profileRepository.save(profile);
-                    } else {
-
-                        // @TODO: Need to error of profileID
-                        // throw new DreamerPrimaryMobileException("Primary mobile: " + profile.getPrimaryMobile() + " already exist");
-
-                        System.out.println("== Profile already exist. Need a ID ==");
-                    }
+                    throw new ProfileNotFoundException("The profile already created for the " + membershipNo + ". Please send ID to update.");
                 }
-
-                return member;
             }
 
-            System.out.println("Done!");
+            return member;
 
         } catch (Exception ex) {
-            // throw new DreamerPrimaryMobileException("Primary mobile: " + profile.getPrimaryMobile() + " already exist");
-            System.out.println("<====== Debugging =====>");
-            ex.printStackTrace();
+            throw new ProfileNotFoundException("The profile already created for the " + membershipNo + ". Please send ID to update.");
         }
-
-        return null;
     }
 }

@@ -1,5 +1,6 @@
 package com.imrancluster.savedream.controller;
 
+import com.imrancluster.savedream.exceptions.ProfileNotFoundException;
 import com.imrancluster.savedream.model.Member;
 import com.imrancluster.savedream.model.Profile;
 import com.imrancluster.savedream.services.MapValidationErrorService;
@@ -93,6 +94,6 @@ public class MemberController {
             return new ResponseEntity<Profile>(profile, HttpStatus.OK);
         }
 
-        return new ResponseEntity<String>("Profile not found", HttpStatus.NOT_FOUND);
+        throw new ProfileNotFoundException("The profile is not found for this " + membershipNo + ".");
     }
 }

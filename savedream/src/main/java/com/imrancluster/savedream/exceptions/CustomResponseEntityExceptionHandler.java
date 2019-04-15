@@ -36,4 +36,12 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
 
     }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleProfileNotFoundException(ProfileNotFoundException ex, WebRequest request) {
+
+        ProfileNotFoundExceptionResponse exceptionResponse = new ProfileNotFoundExceptionResponse(ex.getMessage());
+
+        return new ResponseEntity(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
 }
