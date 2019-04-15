@@ -37,6 +37,10 @@ public class Member {
     @JsonIgnore
     private Profile profile;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    private User user;
+
     public Member() {
 
     }
@@ -103,6 +107,14 @@ public class Member {
 
     public void setProfile(Profile profile) {
         this.profile = profile;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @PrePersist
