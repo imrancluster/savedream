@@ -34,6 +34,7 @@ public class MemberService {
             member.setMembershipNo(membershipNo);
         }
 
+
         if (member.getStatus() == null) {
             member.setStatus("Active");
         }
@@ -61,20 +62,38 @@ public class MemberService {
         return member;
     }
 
-    public Member saveOrUpdateMemberProfile(Long id, Profile profile) {
+    public Member saveOrUpdateMemberProfile(String membershipNo, Profile profile) {
 
-        Optional<Member> member = getMemberById(id);
+        Member member = getMemberByMembershipNo(membershipNo);
+
 
         try {
 
-            profile.setMember(member);
-            Profile theProfile = profileRepository.save(profile);
+            if (member != null) {
 
-            member.setProfile(theProfile);
+                Profile profile1 = member.getProfile();
 
-            // return memberRepository.save(member);
+                if (profile1 == null) {
+                    profile.setMember(member);
+                    Profile theProfile = profileRepository.save(profile);
 
-            memberRepository.save(member);
+                    member.setProfile(theProfile);
+                    memberRepository.save(member);
+
+                } else {
+                    if (profile.getId() != null) {
+                        profileRepository.save(profile);
+                    } else {
+
+                        // @TODO: Need to error of profileID
+                        // throw new DreamerPrimaryMobileException("Primary mobile: " + profile.getPrimaryMobile() + " already exist");
+
+                        System.out.println("== Profile already exist. Need a ID ==");
+                    }
+                }
+
+                return member;
+            }
 
             System.out.println("Done!");
 

@@ -1,6 +1,7 @@
 package com.imrancluster.savedream.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.engine.spi.CascadingAction;
 
 import javax.persistence.*;
@@ -33,6 +34,7 @@ public class Member {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "profile_id", nullable = true)
+    @JsonIgnore
     private Profile profile;
 
     public Member() {

@@ -53,30 +53,46 @@ public class MemberController {
         return new ResponseEntity<Iterable<Member>>(members, HttpStatus.OK);
     }
 
-//    @GetMapping("/{membershipNo}")
-//    public ResponseEntity<?> getMemberByMembershipNo(@PathVariable String membershipNo) {
-//
-//        Member member = memberService.getMemberByMembershipNo(membershipNo);
-//
-//        return new ResponseEntity<Member>(member, HttpStatus.OK);
-//    }
+    @GetMapping("/{membershipNo}")
+    public ResponseEntity<?> getMemberByMembershipNo(@PathVariable String membershipNo) {
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getMemberById(@PathVariable Long id) {
+        Member member = memberService.getMemberByMembershipNo(membershipNo);
 
-        Optional<Member> member = memberService.getMemberById(id);
-
-        return new ResponseEntity<Optional<Member>>(member, HttpStatus.OK);
+        return new ResponseEntity<Member>(member, HttpStatus.OK);
     }
+
+//    @GetMapping("/{id}")
+//    public ResponseEntity<?> getMemberById(@PathVariable Long id) {
+//
+//        Optional<Member> member = memberService.getMemberById(id);
+//
+//        return new ResponseEntity<Optional<Member>>(member, HttpStatus.OK);
+//    }
 
     @PutMapping("/{membershipNo}/profile")
     public ResponseEntity<?> updateMemberProfile(@Valid @RequestBody Profile profile, BindingResult result, @PathVariable String membershipNo) {
 
+        // @TODO: Need to find database error, like duplicate entry mobileNo
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationService(result);
         if (errorMap != null) return errorMap;
 
         Member member = memberService.saveOrUpdateMemberProfile(membershipNo, profile);
+        Profile profile1 = member.getProfile();
 
-        return new ResponseEntity<Member>(member, HttpStatus.OK);
+        return new ResponseEntity<Profile>(profile1, HttpStatus.OK);
+    }
+
+    @GetMapping("/{membershipNo}/profile")
+    public ResponseEntity<?> getMemberProfile(@PathVariable String membershipNo) {
+
+        Member member = memberService.getMemberByMembershipNo(membershipNo);
+
+        Profile profile = member.getProfile();
+
+        if (profile != null) {
+            return new ResponseEntity<Profile>(profile, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<String>("Profile not found", HttpStatus.NOT_FOUND);
     }
 }
