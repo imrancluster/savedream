@@ -50,4 +50,12 @@ public class UserController {
         return new ResponseEntity<Optional<User>>(user, HttpStatus.OK);
     }
 
+    @GetMapping("")
+    public ResponseEntity<?> getAllUsers() {
+
+        Iterable<User> users = userService.getAllUsers();
+
+        return new ResponseEntity<Iterable<User>>(users, HttpStatus.OK);
+    }
+
 }

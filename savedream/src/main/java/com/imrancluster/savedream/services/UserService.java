@@ -55,4 +55,11 @@ public class UserService {
 
         return user;
     }
+
+    public Iterable<User> getAllUsers() {
+
+        Iterable<User> users = userRepository.findAll();
+
+        return users;
+    }
 }
