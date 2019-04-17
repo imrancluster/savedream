@@ -5,6 +5,7 @@ import com.imrancluster.savedream.model.Member;
 import com.imrancluster.savedream.model.User;
 import com.imrancluster.savedream.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,17 +19,14 @@ public class UserService {
     @Autowired
     private MemberService memberService;
 
-    // @Autowired
-    // private BCryptPasswordEncoder bCryptPasswordEncoder;
+     @Autowired
+     private BCryptPasswordEncoder bCryptPasswordEncoder;
     // Its not bean. So we had to create a bean at main application file.
-    // PpmtoolApplication
 
     public User saveUser(User newUser) {
         try {
 
-            // newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
-
-            newUser.setPassword(newUser.getPassword());
+            newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
             newUser.setConfirmPassword("");
             newUser.setUserRole("ROLE_MEMBER");
 

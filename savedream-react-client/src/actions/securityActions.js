@@ -28,7 +28,8 @@ export const getUsers = (history) => async dispatch => {
       type: GET_USERS,
       payload: res.data
     });
-  } catch (error) {
-    history.push("/");
+  } catch (err) {
+    // history.push("/");
+    console.log(err);
   }
 };
