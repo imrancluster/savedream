@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import classnames from "classnames";
 
+import {login} from "../../actions/securityActions";
+
  class Login extends Component {
 
   constructor() {
@@ -21,19 +23,19 @@ import classnames from "classnames";
 
   // It will check this condition before load the page
   componentDidMount() {
-      // if (this.props.security.validToken) {
-      //     this.props.history.push("/dashboard");
-      // }
+      if (this.props.security.validToken) {
+          this.props.history.push("/");
+      }
   }
 
   componentWillReceiveProps(nextProps) {
-      // if (nextProps.errors) {
-      //     this.setState({errors: nextProps.errors});
-      // }
+      if (nextProps.errors) {
+          this.setState({errors: nextProps.errors});
+      }
 
-      // if (nextProps.security.validToken) {
-      //     this.props.history.push("/dashboard");
-      // }
+      if (nextProps.security.validToken) {
+          this.props.history.push("/");
+      }
   }
 
   onChange(e) {
@@ -47,9 +49,9 @@ import classnames from "classnames";
           "password":this.state.password
       };
       
-      console.log(loginRequest);
+      // console.log(loginRequest);
 
-      // this.props.login(loginRequest);
+      this.props.login(loginRequest);
   }
 
   render() {
@@ -68,34 +70,37 @@ import classnames from "classnames";
 
                 <div className="row">
                   <div className="col-md-8 m-auto">
-
-                  <form onSubmit={this.onSubmit}>
-                          <div className="form-group">
-                              <input
-                                  type="text"
-                                  className="form-control form-control-lg"
-                                  placeholder="Username"
-                                  name="username"
-                                  value={this.state.username}
-                                  onChange={this.onChange}
-                              />
-                          </div>
-
-                          <div className="form-group">
-                              <input
-                                  type="password"
-                                  className="form-control form-control-lg"
-                                  placeholder="Password"
-                                  name="password"
-                                  value={this.state.password}
-                                  onChange={this.onChange}
-                              />
-                          </div>
-                          <input
-                            type="submit"
-                            className="btn btn-primary btn-block mt-4"
-                          />
-                      </form>
+                    <form onSubmit={this.onSubmit}>
+                            <div className="form-group">
+                                <input 
+                                type="email" 
+                                className={classnames("form-control form-control-lg",{
+                                    "is-invalid": errors.username
+                                })}
+                                placeholder="Email Address" 
+                                name="username" 
+                                value={this.state.username} 
+                                onChange={this.onChange} />
+                                {errors.username && (
+                                    <div className="invalid-feedback">{ errors.username }</div>
+                                )}
+                            </div>
+                            <div className="form-group">
+                                <input 
+                                type="password" 
+                                className={classnames("form-control form-control-lg",{
+                                    "is-invalid": errors.password
+                                })}
+                                placeholder="Password" 
+                                name="password" 
+                                value={this.state.password} 
+                                onChange={this.onChange} />
+                                {errors.password && (
+                                    <div className="invalid-feedback">{ errors.password }</div>
+                                )}
+                            </div>
+                            <input type="submit" className="btn btn-info btn-block mt-4" />
+                        </form>
 
                   </div>
                 </div>  
@@ -108,4 +113,16 @@ import classnames from "classnames";
   }
 }
 
-export default Login;
+Login.propTypes = {
+    login: PropTypes.func.isRequired,
+    errors: PropTypes.object.isRequired,
+    security: PropTypes.object.isRequired
+};
+
+// security already added in the index reducer file
+const mapStateToProps = state => ({
+    security: state.security,
+    errors: state.errors
+});
+
+export default connect(mapStateToProps, {login})(Login);

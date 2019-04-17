@@ -71,6 +71,7 @@ public class User implements UserDetails {
         this.userRole = userRole;
     }
 
+    @JsonIgnore
     public String getPassword() {
         return password;
     }
