@@ -5,6 +5,8 @@ import PropTypes from "prop-types";
 import classnames from "classnames";
 
 import _ from 'lodash';
+import Loader from 'react-loader-spinner'
+
 import { getUser, addUpdateProfile }  from "../../actions/securityActions";
 import ViewProfile from './ViewProfile';
 import AddProfile from './AddProfile';
@@ -25,7 +27,9 @@ class Profile extends Component {
             "membershipNo": "",
 
             errors: {},
-            showAddForm: false
+            showAddForm: false,
+
+            loader: true
         };
 
         this.showForm = this.showForm.bind(this);
@@ -45,6 +49,13 @@ class Profile extends Component {
         if (nextProps.errors) {
             this.setState({ errors: nextProps.errors });
         }
+
+        // loader
+        const { member } = this.props.security;
+        if (_.get(member,'member.membershipNo') !== null) {
+            this.setState({ loader: false });
+        }
+
     }
 
     showForm() {
@@ -122,12 +133,16 @@ class Profile extends Component {
         
         var mobileReadOnly = profile.primaryMobile ? "readOnly" : "";
 
+        console.log(this.state.loader);
+
     return (
       <div className="container">
         <div className="app-header">
           <h2>Profile</h2>
           <hr />
-        </div>
+
+          { this.state.loader && <Loader type="Oval" color="#00BFFF" height="50" width="50" /> }
+        </div>  
 
         Member Type: {member.userType}<br />
         Membership No: {_.get(member,'member.membershipNo')}

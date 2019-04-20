@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import {Link} from "react-router-dom"
+
 class PeopleRow extends Component {
   render() {
 
@@ -13,7 +15,7 @@ class PeopleRow extends Component {
         <td>{ user.userRole }</td>
         <td>{ user.member.status }</td>
         <td>{ user.created_at }</td>
-        <td>Edit/Update/Delete</td>
+        <td><Link to={`/profile/${user.id}`}>View</Link> / Delete</td>
       </tr>
     )
   }
